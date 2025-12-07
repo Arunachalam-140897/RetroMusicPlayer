@@ -175,6 +175,7 @@ dependencies {
     implementation(libs.tankery.circularSeekBar)
 
     implementation(libs.androidx.exoplayer)
+    implementation(libs.androidx.exoplayer.ffmpeg)
 }
 
 fun getProperties(fileName: String): Properties? {

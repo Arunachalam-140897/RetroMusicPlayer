@@ -13,6 +13,7 @@ import androidx.media3.common.PlaybackParameters
 import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.exoplayer.DefaultRenderersFactory
 import code.name.monkey.retromusic.R
 import code.name.monkey.retromusic.extensions.showToast
 import code.name.monkey.retromusic.extensions.uri
@@ -23,7 +24,11 @@ import code.name.monkey.retromusic.util.PreferenceUtil.playbackSpeed
 import code.name.monkey.retromusic.util.logE
 
 class RetroExoPlayer(context: Context) : AudioManagerPlayback(context), Player.Listener {
-    private var player: ExoPlayer = ExoPlayer.Builder(context).build()
+    private val renderersFactory: DefaultRenderersFactory =
+        DefaultRenderersFactory(context)
+            .setExtensionRendererMode(DefaultRenderersFactory.EXTENSION_RENDERER_MODE_PREFER)
+
+    private var player: ExoPlayer = ExoPlayer.Builder(context, renderersFactory).build()
     override var callbacks: PlaybackCallbacks? = null
 
     /**
@@ -224,7 +229,7 @@ class RetroExoPlayer(context: Context) : AudioManagerPlayback(context), Player.L
         logE(error)
         isInitialized = false
         player.release()
-        player = ExoPlayer.Builder(context).build()
+        player = ExoPlayer.Builder(context, renderersFactory).build()
         player.setWakeMode(C.WAKE_MODE_LOCAL)
         context.showToast(R.string.unplayable_file)
     }
